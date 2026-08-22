@@ -1,0 +1,11 @@
+.ipynb_checkpoints
+__pycache__
+checkpoints
+datasets
+.DS_Store
+olds
+tests
+loss_curves
+log_dir
+.vscode
+wandb

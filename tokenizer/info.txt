@@ -1,0 +1,19 @@
+tokenizer 01:
+
+im_start_id = 30001
+pad_id = 30000
+im_end_id = 3
+assistant_id = 2
+user_id = 1
+eot_id = 0
+
+------------------------------------
+tokenizer 02:
+
+eot_id = 0
+pad_id = 1
+im_start_id = 2
+im_end_id = 3
+user_id = 4
+assistant_id = 5
+\n = 6

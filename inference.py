@@ -1,41 +1,12 @@
 import torch
 from tokenizers import Tokenizer
 import gc
-from model_old import GPT
-from dataclasses import dataclass
+from model import GPT, GPTConfig
 
 device = torch.device("cuda:1") if torch.cuda.is_available() else torch.device("cpu")
 print(f"Running inference on: {device}")
 
-# everything below here NEEDS to be identical to load an extistng model
-@dataclass
-class GPTConfig:
-    vocab_size:  int = 30002
-    n_embed:     int = 1536
-    n_head:      int = 24
-    n_layer:     int = 32
-    dropout:   float = 0.0
-    bias:       bool = True
-    end_text_id: int = 0
-    end_turn_id: int = 3
-
-#n_embed = 2048
-#n_hidden = int(4 * n_embed * 2 / 3)
-#n_hidden = ((n_hidden + 255) // 256) * 256
-#
-#@dataclass
-#class GPTConfig:
-#    vocab_size:  int = 32768
-#    n_embed:     int = n_embed
-#    n_hidden:    int = n_hidden
-#    n_head:      int = 16
-#    n_layer:     int = 22
-#    dropout:   float = 0.0
-#    bias:       bool = False
-#    end_text_id: int = 0
-#    end_turn_id: int = 4
-
-tokenizer_file = "tokenizer/tokenizer_01.json"
+tokenizer_file = "tokenizer/tokenizer_02.json"
 model_id = "02"
 model_step = "42300"
 data_abreviation = "pre"

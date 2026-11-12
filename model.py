@@ -3,7 +3,24 @@ import time
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
+from dataclasses import dataclass
 from flash_attn import flash_attn_func, flash_attn_varlen_func
+
+n_embed = 2048
+n_hidden = int(4 * n_embed * 2 / 3)
+n_hidden = ((n_hidden + 255) // 256) * 256
+
+@dataclass
+class GPTConfig:
+    vocab_size:  int = 32768
+    n_embed:     int = n_embed
+    n_hidden:    int = n_hidden
+    n_head:      int = 16
+    n_layer:     int = 22
+    dropout:   float = 0.0
+    bias:       bool = False
+    end_text_id: int = 0
+    end_turn_id: int = 4
 
 def sample_logits(logits, generated_tokens, rep_pen=1.0, temp=1.0, top_k=0, top_p=0.0, generator=None):
 

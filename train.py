@@ -24,12 +24,16 @@ from helpers import (
     get_lr, 
     set_seed
     )
-from model import GPT
+from model import GPT, GPTConfig
 
 torch._dynamo.config.optimize_ddp = False
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
+
+#---------------------------------------------------------------------------------------------
+# CHECK ALL PARAMS BETWEEN THESE LINES ARE CORRECT BEFORE TRAINING
+# MODEL HYPERPARAMS ARE AT THE TOP OF "model.py"
 
 data_folder = "datasets/fineweb_t2"
 block_size = 4096
@@ -69,7 +73,6 @@ save_steps = 5  # how many optimization steps between eval and saving model and 
 log_steps = 5
 assert save_steps % log_steps == 0, "save_steps must be a multiple of log_steps for consistent logging and checkpointing"
 
-# everything below here NEEDS to be identical to load an extistng model
 # special tokens
 end_text_id = 0
 system_id = 1
@@ -77,21 +80,6 @@ user_id = 2
 assistant_id = 3
 end_turn_id = 4
 pad_id = 5
-
-n_embed = 2048
-n_hidden = int(4 * n_embed * 2 / 3)
-n_hidden = ((n_hidden + 255) // 256) * 256 # round to multiple of 256 for efficiency
-class GPTConfig:
-    vocab_size:  int = 32768
-    n_embed:     int = n_embed
-    n_hidden:    int = n_hidden
-    n_head:      int = 32
-    n_group:     int = 4
-    n_layer:     int = 22
-    dropout:   float = 0.0
-    bias:       bool = False
-    end_text_id: int = end_text_id
-    end_turn_id: int = end_turn_id
 
 # adamw optimizer
 learning_rate = 4e-4 # max learning rate
@@ -117,6 +105,8 @@ backend = 'nccl' # 'nccl', 'gloo', etc.
 device = 'cuda:1' # examples: 'cpu', 'cuda', 'cuda:0', 'cuda:1' etc., or try 'mps' on macbooks
 dtype = torch.bfloat16 # use bfloat16 if amphere archetecture or newer (30 series or newer), else use float16 or float32
 
+# END HYPERPARAMS
+#----------------------------------------------------------------------------------------------------
 distributed = int(os.environ.get("WORLD_SIZE", -1)) > 1  # is this a distributed run?
 if distributed:
     dist.init_process_group(backend)
